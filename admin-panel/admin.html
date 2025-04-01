@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Bonus Hunt</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="admin-container" id="authContainer">
+    <h1>Panneau d'administration</h1>
+    <input type="password" id="adminPassword" placeholder="Mot de passe admin" />
+    <button id="adminLoginBtn">Se connecter</button>
+    <div id="authError" class="error-msg">Mot de passe incorrect</div>
+  </div>
+
+  <div class="admin-panel hidden" id="panelContainer">
+    <h2>Bienvenue dans le panel admin 🎛️</h2>
+    <p>À toi de gérer les fournisseurs et les machines.</p>
+    <!-- Future interface ici -->
+    <button id="logoutAdminBtn">Se déconnecter</button>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
