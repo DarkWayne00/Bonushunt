@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Bonus Hunt</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">🎰 Rebeu Masquey</div>
+      <h3>Mes bonus hunts</h3>
+      <ul class="session-list" id="sessionList">
+        <!-- Dynamique via JS -->
+      </ul>
+      <button class="btn add-session" id="addSessionBtn">+ Lancer un bonus hunt</button>
+      <button class="bonus-btn">Récupère ton bonus casino</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="header">
+        <h1>SHINY WILD • CASINO</h1>
+        <div class="header-actions">
+          <label class="public-switch">
+            Bonus Hunt: #<span id="sessionNumber">1</span>
+            <input type="checkbox" checked />
+            <span class="switch-text">Rendre public</span>
+          </label>
+
+          <div class="theme-toggle" title="Activer/désactiver le mode sombre">
+            <span id="theme-icon">🌞</span>
+            <label class="switch">
+              <input type="checkbox" id="themeSwitch" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </header>
+
+      <section class="add-session-form">
+        <h2>Ajouter une session Bonus Hunt</h2>
+        <form id="sessionForm">
+          <div id="successMessage" class="success-msg" style="display:none;">
+            ✅ Session ajoutée avec succès !
+          </div>
+          <input type="date" id="date" required />
+          <input type="text" id="machines" placeholder="Machines jouées" required />
+          <input type="number" id="investi" placeholder="Montant investi (€)" required />
+          <input type="number" id="gains" placeholder="Gains (€)" required />
+          <button type="submit" class="bonus-btn">Ajouter la session</button>
+        </form>
+      </section>
+
+      <section class="bonus-sessions">
+        <h2>Sessions Bonus Hunt</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Machines</th>
+              <th>Total Investi (€)</th>
+              <th>Gains (€)</th>
+              <th>Statut</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sessionTableBody"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const themeSwitch = document.getElementById("themeSwitch");
+    const htmlEl = document.documentElement;
+    const themeIcon = document.getElementById("theme-icon");
+
+    function updateIcon(theme) {
+      themeIcon.textContent = theme === "dark" ? "🌙" : "🌞";
+    }
+
+    if (localStorage.getItem("theme") === "dark") {
+      htmlEl.setAttribute("data-theme", "dark");
+      themeSwitch.checked = true;
+      updateIcon("dark");
+    } else {
+      updateIcon("light");
+    }
+
+    themeSwitch.addEventListener("change", () => {
+      if (themeSwitch.checked) {
+        htmlEl.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+        updateIcon("dark");
+      } else {
+        htmlEl.removeAttribute("data-theme");
+        localStorage.setItem("theme", "light");
+        updateIcon("light");
+      }
+    });
+
+    // Gestion des sessions bonus (comme sur l'ancien index.html)
+    const form = document.getElementById("sessionForm");
+    const tableBody = document.getElementById("sessionTableBody");
+    const successMessage = document.getElementById("successMessage");
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const sessions = JSON.parse(localStorage.getItem("sessions")) || [];
+      displaySessions(sessions);
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const date = document.getElementById("date").value;
+      const machines = document.getElementById("machines").value;
+      const investi = parseFloat(document.getElementById("investi").value);
+      const gains = parseFloat(document.getElementById("gains").value);
+      const status = gains - investi;
+
+      const newSession = { date, machines, investi, gains, status };
+      const sessions = JSON.parse(localStorage.getItem("sessions")) || [];
+      sessions.push(newSession);
+      localStorage.setItem("sessions", JSON.stringify(sessions));
+
+      displaySessions(sessions);
+      form.reset();
+      showSuccessMessage();
+    });
+
+    function displaySessions(sessions) {
+      sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+      tableBody.innerHTML = "";
+      sessions.forEach((session, index) => addSessionToTable(session, index));
+    }
+
+    function addSessionToTable({ date, machines, investi, gains, status }, index) {
+      const statusClass = status >= 0 ? "status-gain" : "status-loss";
+      const statusText = status >= 0 ? "+" + status : status;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${date}</td>
+        <td>${machines}</td>
+        <td>${investi}</td>
+        <td>${gains}</td>
+        <td class="${statusClass}">${statusText}</td>
+        <td><button class="delete-btn">Supprimer</button></td>
+      `;
+
+      row.querySelector(".delete-btn").addEventListener("click", () => {
+        const sessions = JSON.parse(localStorage.getItem("sessions")) || [];
+        sessions.splice(index, 1);
+        localStorage.setItem("sessions", JSON.stringify(sessions));
+        displaySessions(sessions);
+      });
+
+      tableBody.appendChild(row);
+    }
+
+    function showSuccessMessage() {
+      successMessage.style.display = "block";
+      successMessage.style.opacity = "1";
+      setTimeout(() => {
+        successMessage.style.opacity = "0";
+        setTimeout(() => {
+          successMessage.style.display = "none";
+        }, 300);
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
