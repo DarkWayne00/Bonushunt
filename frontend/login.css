@@ -1,0 +1,120 @@
+/* login.css */
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1f1f1f, #111);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .login-container {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: center;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+  }
+  
+  .login-container h1 {
+    margin-bottom: 25px;
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+  
+  input[type="email"],
+  input[type="password"] {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    margin-bottom: 18px;
+    background: #2c2c2c;
+    color: white;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus {
+    outline: none;
+    background: #3a3a3a;
+    box-shadow: 0 0 0 2px #28a745;
+  }
+  
+  .login-btn {
+    padding: 12px 28px;
+    font-size: 16px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .login-btn:hover {
+    background: #218838;
+    transform: scale(1.03);
+  }
+  
+  .toggle-text {
+    margin-top: 18px;
+    font-size: 14px;
+    color: #ccc;
+  }
+  
+  .toggle-text span {
+    color: #28a745;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .logo {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  
+  /* Error message */
+  .error-msg {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    display: none;
+  }
+  
+  /* Loader */
+  .loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid #28a745;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+    z-index: 10;
+  }
+  
+  @keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  

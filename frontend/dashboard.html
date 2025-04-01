@@ -12,11 +12,11 @@
     <aside class="sidebar">
       <div class="logo">🎰 Rebeu Masquey</div>
       <h3>Mes bonus hunts</h3>
-      <ul class="session-list" id="sessionList">
-        <!-- Dynamique via JS -->
-      </ul>
+      <p id="userEmailDisplay" style="font-size: 14px; margin-bottom: 10px;"></p>
+      <ul class="session-list" id="sessionList"></ul>
       <button class="btn add-session" id="addSessionBtn">+ Lancer un bonus hunt</button>
       <button class="bonus-btn">Récupère ton bonus casino</button>
+      <button class="btn logout-btn" id="logoutBtn" style="margin-top: 20px;">Déconnexion</button>
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -74,6 +74,23 @@
   </div>
 
   <script>
+    // 🔐 Vérification de l'utilisateur
+    const email = localStorage.getItem("userEmail");
+    if (!email) {
+      window.location.href = "login.html";
+    }
+    const key = `sessions_${email}`;
+
+    // 🧾 Affichage de l’email
+    document.getElementById("userEmailDisplay").textContent = `Connecté : ${email}`;
+
+    // 🔓 Déconnexion
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("userEmail");
+      window.location.href = "login.html";
+    });
+
+    // 🎨 Thème
     const themeSwitch = document.getElementById("themeSwitch");
     const htmlEl = document.documentElement;
     const themeIcon = document.getElementById("theme-icon");
@@ -102,13 +119,13 @@
       }
     });
 
-    // Gestion des sessions bonus (comme sur l'ancien index.html)
+    // 📋 Gestion des sessions
     const form = document.getElementById("sessionForm");
     const tableBody = document.getElementById("sessionTableBody");
     const successMessage = document.getElementById("successMessage");
 
     window.addEventListener("DOMContentLoaded", () => {
-      const sessions = JSON.parse(localStorage.getItem("sessions")) || [];
+      const sessions = JSON.parse(localStorage.getItem(key)) || [];
       displaySessions(sessions);
     });
 
@@ -121,9 +138,9 @@
       const status = gains - investi;
 
       const newSession = { date, machines, investi, gains, status };
-      const sessions = JSON.parse(localStorage.getItem("sessions")) || [];
+      const sessions = JSON.parse(localStorage.getItem(key)) || [];
       sessions.push(newSession);
-      localStorage.setItem("sessions", JSON.stringify(sessions));
+      localStorage.setItem(key, JSON.stringify(sessions));
 
       displaySessions(sessions);
       form.reset();
@@ -151,9 +168,9 @@
       `;
 
       row.querySelector(".delete-btn").addEventListener("click", () => {
-        const sessions = JSON.parse(localStorage.getItem("sessions")) || [];
+        const sessions = JSON.parse(localStorage.getItem(key)) || [];
         sessions.splice(index, 1);
-        localStorage.setItem("sessions", JSON.stringify(sessions));
+        localStorage.setItem(key, JSON.stringify(sessions));
         displaySessions(sessions);
       });
 
