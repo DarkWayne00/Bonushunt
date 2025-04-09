@@ -1,120 +1,228 @@
-/* login.css */
-
+/* 🌑 Thème général */
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #1f1f1f, #111);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #1f1f1f, #111);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 💬 Conteneur principal */
+.login-container {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  position: relative;
+  animation: fadeIn 0.6s ease;
+}
+
+/* 🎰 Logo */
+.logo {
+  font-size: 28px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+/* 📝 Titres */
+h1, h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+}
+
+h2 {
+  margin-top: 30px;
+}
+
+/* 🧾 Champs de saisie */
+input[type="email"],
+input[type="password"],
+#verifyCodeInput {
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+  margin-bottom: 18px;
+  background: #2c2c2c;
+  color: white;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  background: #3a3a3a;
+  box-shadow: 0 0 0 2px #28a745;
+}
+
+/* ✅ Boutons */
+.login-btn {
+  padding: 12px 28px;
+  font-size: 16px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.login-btn:hover {
+  background: #218838;
+  transform: scale(1.03);
+}
+
+/* 🔁 Bouton secondaire (renvoyer code) */
+#resendCodeBtn {
+  margin-top: 12px;
+  background: transparent;
+  border: 2px solid #28a745;
+  color: #28a745;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#resendCodeBtn.show {
+  display: flex;
+}
+
+#resendCodeBtn:hover {
+  background: #28a745;
+  color: white;
+}
+
+/* 🔄 Texte de bas de page */
+.toggle-text {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.toggle-text span {
+  color: #28a745;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* 🚨 Messages d'erreur */
+.error-msg {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  display: none;
+  animation: shake 0.4s ease;
+}
+
+/* 🔐 Section vérification */
+#verifySection {
+  margin-top: 30px;
+  text-align: center;
+}
+
+#verifySection input {
+  margin-bottom: 12px;
+}
+
+#verifyError {
+  margin-top: 10px;
+  display: none;
+}
+
+/* ⏱️ Timer de vérification */
+#verifyTimer {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* ⏳ Loader */
+.loader {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #28a745;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+  z-index: 10;
+}
+
+/* 🚫 Classe pour masquer dynamiquement */
+.hidden {
+  display: none !important;
+}
+
+/* 🎞️ Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
-  
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* 📱 Responsive */
+@media (max-width: 350px) {
   .login-container {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 40px;
-    border-radius: 18px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    text-align: center;
-    width: 90%;
-    max-width: 420px;
-    position: relative;
+    padding: 25px;
   }
-  
-  .login-container h1 {
-    margin-bottom: 25px;
-    font-size: 24px;
-    letter-spacing: 1px;
-  }
-  
-  input[type="email"],
-  input[type="password"] {
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: none;
-    width: 100%;
-    margin-bottom: 18px;
-    background: #2c2c2c;
-    color: white;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-  }
-  
-  input:focus {
-    outline: none;
-    background: #3a3a3a;
-    box-shadow: 0 0 0 2px #28a745;
-  }
-  
-  .login-btn {
-    padding: 12px 28px;
-    font-size: 16px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
-    margin-top: 10px;
-    width: 100%;
-  }
-  
-  .login-btn:hover {
-    background: #218838;
-    transform: scale(1.03);
-  }
-  
-  .toggle-text {
-    margin-top: 18px;
-    font-size: 14px;
-    color: #ccc;
-  }
-  
-  .toggle-text span {
-    color: #28a745;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
+
   .logo {
-    font-size: 28px;
-    margin-bottom: 15px;
+    font-size: 22px;
   }
-  
-  /* Error message */
-  .error-msg {
-    background-color: #ff4d4d;
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+
+  .login-btn,
+  #resendCodeBtn {
     font-size: 14px;
-    display: none;
+    padding: 10px 24px;
   }
-  
-  /* Loader */
-  .loader {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-top: 4px solid #28a745;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    animation: spin 1s linear infinite;
-    z-index: 10;
+
+  input[type="email"],
+  input[type="password"],
+  #verifyCodeInput {
+    font-size: 14px;
+    padding: 10px 16px;
   }
-  
-  @keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-  }
-  
+}

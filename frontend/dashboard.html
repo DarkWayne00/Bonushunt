@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Bonus Hunt</title>
   <link rel="stylesheet" href="dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
@@ -29,7 +30,6 @@
             <input type="checkbox" checked />
             <span class="switch-text">Rendre public</span>
           </label>
-
           <div class="theme-toggle" title="Activer/désactiver le mode sombre">
             <span id="theme-icon">🌞</span>
             <label class="switch">
@@ -46,21 +46,58 @@
           <div id="successMessage" class="success-msg" style="display:none;">
             ✅ Session ajoutée avec succès !
           </div>
-          <input type="date" id="date" required />
-          <input type="text" id="machines" placeholder="Machines jouées" required />
-          <input type="number" id="investi" placeholder="Montant investi (€)" required />
-          <input type="number" id="gains" placeholder="Gains (€)" required />
-          <button type="submit" class="bonus-btn">Ajouter la session</button>
+
+          <div class="form-field">
+            <label for="date">Date :</label>
+            <input type="date" id="date" required autofocus />
+          </div>
+
+          <div class="form-field">
+            <label for="fournisseurSelect">Fournisseur :</label>
+            <select id="fournisseurSelect" required>
+              <option value="" disabled selected>-- Choisir un fournisseur --</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="machineSelect">Machine :</label>
+            <select id="machineSelect" required>
+              <option value="" disabled selected>-- Choisir une machine --</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="investi">Montant investi (€) :</label>
+            <input type="number" id="investi" placeholder="Montant investi (€)" required />
+          </div>
+
+          <div class="form-field">
+            <label for="gains">Gains (€) :</label>
+            <input type="number" id="gains" placeholder="Gains (€)" required />
+          </div>
+
+          <div class="form-field" style="align-self: end;">
+            <button type="submit" class="bonus-btn">Ajouter la session</button>
+          </div>
         </form>
       </section>
 
       <section class="bonus-sessions">
         <h2>Sessions Bonus Hunt</h2>
+
+        <!-- 🔍 Barre de recherche et filtre -->
+        <div class="search-filter">
+          <input type="text" id="searchInput" placeholder="Rechercher une machine ou un fournisseur..." />
+          <select id="fournisseurFilter">
+            <option value="">Tous les fournisseurs</option>
+          </select>
+        </div>
+
         <table>
           <thead>
             <tr>
               <th>Date</th>
-              <th>Machines</th>
+              <th>Machine</th>
               <th>Total Investi (€)</th>
               <th>Gains (€)</th>
               <th>Statut</th>
@@ -70,123 +107,16 @@
           <tbody id="sessionTableBody"></tbody>
         </table>
       </section>
+
+      <!-- 📊 Zone de statistiques -->
+      <section style="margin-top: 50px;">
+        <h2>Statistiques</h2>
+        <canvas id="statsChart" height="100"></canvas>
+      </section>
+
     </main>
   </div>
 
-  <script>
-    // 🔐 Vérification de l'utilisateur
-    const email = localStorage.getItem("userEmail");
-    if (!email) {
-      window.location.href = "login.html";
-    }
-    const key = `sessions_${email}`;
-
-    // 🧾 Affichage de l’email
-    document.getElementById("userEmailDisplay").textContent = `Connecté : ${email}`;
-
-    // 🔓 Déconnexion
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("userEmail");
-      window.location.href = "login.html";
-    });
-
-    // 🎨 Thème
-    const themeSwitch = document.getElementById("themeSwitch");
-    const htmlEl = document.documentElement;
-    const themeIcon = document.getElementById("theme-icon");
-
-    function updateIcon(theme) {
-      themeIcon.textContent = theme === "dark" ? "🌙" : "🌞";
-    }
-
-    if (localStorage.getItem("theme") === "dark") {
-      htmlEl.setAttribute("data-theme", "dark");
-      themeSwitch.checked = true;
-      updateIcon("dark");
-    } else {
-      updateIcon("light");
-    }
-
-    themeSwitch.addEventListener("change", () => {
-      if (themeSwitch.checked) {
-        htmlEl.setAttribute("data-theme", "dark");
-        localStorage.setItem("theme", "dark");
-        updateIcon("dark");
-      } else {
-        htmlEl.removeAttribute("data-theme");
-        localStorage.setItem("theme", "light");
-        updateIcon("light");
-      }
-    });
-
-    // 📋 Gestion des sessions
-    const form = document.getElementById("sessionForm");
-    const tableBody = document.getElementById("sessionTableBody");
-    const successMessage = document.getElementById("successMessage");
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const sessions = JSON.parse(localStorage.getItem(key)) || [];
-      displaySessions(sessions);
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const date = document.getElementById("date").value;
-      const machines = document.getElementById("machines").value;
-      const investi = parseFloat(document.getElementById("investi").value);
-      const gains = parseFloat(document.getElementById("gains").value);
-      const status = gains - investi;
-
-      const newSession = { date, machines, investi, gains, status };
-      const sessions = JSON.parse(localStorage.getItem(key)) || [];
-      sessions.push(newSession);
-      localStorage.setItem(key, JSON.stringify(sessions));
-
-      displaySessions(sessions);
-      form.reset();
-      showSuccessMessage();
-    });
-
-    function displaySessions(sessions) {
-      sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
-      tableBody.innerHTML = "";
-      sessions.forEach((session, index) => addSessionToTable(session, index));
-    }
-
-    function addSessionToTable({ date, machines, investi, gains, status }, index) {
-      const statusClass = status >= 0 ? "status-gain" : "status-loss";
-      const statusText = status >= 0 ? "+" + status : status;
-
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${date}</td>
-        <td>${machines}</td>
-        <td>${investi}</td>
-        <td>${gains}</td>
-        <td class="${statusClass}">${statusText}</td>
-        <td><button class="delete-btn">Supprimer</button></td>
-      `;
-
-      row.querySelector(".delete-btn").addEventListener("click", () => {
-        const sessions = JSON.parse(localStorage.getItem(key)) || [];
-        sessions.splice(index, 1);
-        localStorage.setItem(key, JSON.stringify(sessions));
-        displaySessions(sessions);
-      });
-
-      tableBody.appendChild(row);
-    }
-
-    function showSuccessMessage() {
-      successMessage.style.display = "block";
-      successMessage.style.opacity = "1";
-      setTimeout(() => {
-        successMessage.style.opacity = "0";
-        setTimeout(() => {
-          successMessage.style.display = "none";
-        }, 300);
-      }, 1500);
-    }
-  </script>
+  <script src="dashboard.js"></script>
 </body>
 </html>

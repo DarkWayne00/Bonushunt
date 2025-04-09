@@ -1,46 +1,328 @@
+/* admin.css */
+
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: #111;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #111;
+  color: white;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.wrapper {
+  padding: 40px 20px;
+  max-width: 960px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.admin-container,
+.admin-panel {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 40px;
+  border-radius: 14px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 100%;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+.admin-settings {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #ccc;
+  transition: transform 0.2s ease;
+}
+
+.admin-settings:hover {
+  color: white;
+  transform: rotate(15deg);
+}
+
+h1, h2, h3, h4 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+input, button, select {
+  padding: 12px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+input, select {
+  background: #2c2c2c;
+  color: white;
+  width: 250px;
+  transition: background 0.3s;
+}
+
+input:focus, select:focus {
+  outline: none;
+  background: #3a3a3a;
+}
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #007bff, #0056d2);
+  color: #fff;
+  border: 1px solid #0056d2;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, #3399ff, #3373d2);
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(to right, #dc3545, #a71d2a);
+  color: #fff;
+  border: 1px solid #a71d2a;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(to right, #ff4d5a, #c4303d);
+  box-shadow: 0 0 8px rgba(255, 77, 90, 0.4);
+}
+
+.btn-secondary {
+  background: #2c2c2c;
+  color: #ccc;
+  border: 1px solid #444;
+}
+
+.btn-secondary:hover {
+  background: #444;
+  color: white;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.error-msg {
+  color: #ff4d4d;
+  margin-top: 5px;
+  font-size: 14px;
+  display: none;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-top: 30px;
+  overflow-y: auto;
+}
+
+/* 📦 Fournisseurs & Machines & Utilisateurs */
+.fournisseur-list,
+.machine-list,
+.user-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.fournisseur-list li,
+.machine-list li,
+.user-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #444;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 15px;
+  border-radius: 6px;
+}
+
+.fournisseur-list li.dragging,
+.machine-list li.dragging {
+  opacity: 0.5;
+  transform: scale(1.02);
+}
+
+.drag-handle {
+  cursor: grab;
+  margin-right: 12px;
+  font-size: 18px;
+  color: #888;
+}
+
+.search-machine {
+  padding: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #222;
+  color: white;
+  border: none;
+}
+
+.search-machine:focus {
+  outline: none;
+  background: #333;
+}
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 8px;
+}
+
+#pagination button {
+  background: #2c2c2c;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+#pagination button:hover {
+  background: #3a3a3a;
+}
+
+#pagination .active {
+  background: #28a745;
+}
+
+/* ✅ Notification */
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.notification.success {
+  background-color: rgba(40, 167, 69, 0.85);
+}
+
+.notification.error {
+  background-color: rgba(220, 53, 69, 0.85);
+}
+
+.notification.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 🧍‍♂️ Modal Utilisateurs */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+}
+
+.modal-content {
+  background: #222;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  text-align: left;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  font-size: 24px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: white;
+}
+
+.delete-user-btn {
+  background: transparent;
+  color: #ff4d4d;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+
+.delete-user-btn:hover {
+  color: #ff8888;
+}
+
+/* 📱 Responsive */
+@media (max-width: 600px) {
+  .stats {
     flex-direction: column;
+    gap: 10px;
   }
-  
-  input, button {
-    padding: 12px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
+
+  input, select {
+    width: 100%;
   }
-  
-  input {
-    background: #2c2c2c;
-    color: white;
-    width: 250px;
+
+  .wrapper {
+    padding: 20px 10px;
   }
-  
-  button {
-    background: #28a745;
-    color: white;
-    cursor: pointer;
+
+  .modal-content {
+    padding: 20px;
   }
-  
-  button:hover {
-    background: #218838;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  .error-msg {
-    color: #ff4d4d;
-    margin-top: 5px;
-    font-size: 14px;
-  }
-  
+}

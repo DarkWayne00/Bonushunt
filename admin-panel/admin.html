@@ -5,20 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel - Bonus Hunt</title>
   <link rel="stylesheet" href="admin.css" />
-</head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head> 
 <body>
-  <div class="admin-container" id="authContainer">
-    <h1>Panneau d'administration</h1>
-    <input type="password" id="adminPassword" placeholder="Mot de passe admin" />
-    <button id="adminLoginBtn">Se connecter</button>
-    <div id="authError" class="error-msg">Mot de passe incorrect</div>
-  </div>
+  <div class="wrapper">
 
-  <div class="admin-panel hidden" id="panelContainer">
-    <h2>Bienvenue dans le panel admin 🎛️</h2>
-    <p>À toi de gérer les fournisseurs et les machines.</p>
-    <!-- Future interface ici -->
-    <button id="logoutAdminBtn">Se déconnecter</button>
+    <!-- ✅ Notification flottante -->
+    <div id="notification" class="notification hidden"></div>
+
+    <!-- 🔐 Connexion admin -->
+    <div class="admin-container" id="authContainer">
+      <h1>Panneau d'administration</h1>
+      <input type="password" id="adminPassword" placeholder="Mot de passe admin" />
+      <button id="adminLoginBtn" class="btn btn-primary"><i class="fas fa-lock"></i> Se connecter</button>
+      <div id="authError" class="error-msg">Mot de passe incorrect</div>
+    </div>
+
+    <!-- 🎮 Panel admin -->
+    <div class="admin-panel hidden" id="panelContainer">
+
+      <!-- ⚙️ Icône paramètres utilisateurs -->
+      <div class="admin-settings">
+        <button id="manageUsersBtn" title="Gérer les utilisateurs" class="btn btn-secondary" style="position:absolute; top:20px; right:20px;">
+          <i class="fas fa-users-cog"></i>
+        </button>
+      </div>
+
+      <h2>Bienvenue dans le panel admin 🎮</h2>
+      <p>Gère tes fournisseurs et leurs machines facilement.</p>
+
+      <!-- Statistiques -->
+      <div id="global-stats" class="stats">
+        <span>📦 Fournisseurs : <span id="fournisseurCount">0</span></span>
+        <span>🎰 Machines : <span id="machineCount">0</span></span>
+      </div>
+
+      <!-- 📦 Fournisseurs -->
+      <section class="fournisseur-section card">
+        <h3>Ajouter un fournisseur</h3>
+        <form id="fournisseurForm" class="form-inline">
+          <input type="text" id="fournisseurInput" placeholder="Nom du fournisseur" required />
+          <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter</button>
+        </form>
+        <input type="text" id="fournisseurSearch" placeholder="🔍 Rechercher un fournisseur" class="search-machine" />
+        <ul id="fournisseurList" class="fournisseur-list"></ul>
+        <div id="pagination"></div>
+      </section>
+
+      <!-- 🎰 Machines -->
+      <section class="machine-section card">
+        <h3>Gérer les machines</h3>
+        <select id="fournisseurSelect">
+          <option value="">-- Choisir un fournisseur --</option>
+        </select>
+        <form id="machineForm" class="form-inline">
+          <input type="text" id="machineInput" placeholder="Nom de la machine" required />
+          <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter</button>
+        </form>
+        <ul id="machineList" class="machine-list"></ul>
+      </section>
+
+      <!-- 🔄 Export / Import -->
+      <section class="import-export-buttons card">
+        <h3>📦 Sauvegarde / Restauration</h3>
+        <button id="exportBtn" class="btn btn-primary"><i class="fas fa-download"></i> Exporter JSON</button>
+        <button id="importBtn" class="btn btn-info"><i class="fas fa-upload"></i> Importer JSON</button>
+        <input type="file" id="importInput" accept=".json" hidden />
+      </section>
+
+      <!-- 👥 Fenêtre modale utilisateurs -->
+      <div id="userModal" class="modal hidden">
+        <div class="modal-content">
+          <span id="closeUserModal" class="close-btn">&times;</span>
+          <h3>👥 Gestion des utilisateurs</h3>
+          <ul id="userList" class="user-list"></ul>
+        </div>
+      </div>
+
+      <!-- 🔓 Déconnexion -->
+      <button id="logoutAdminBtn" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Se déconnecter</button>
+    </div>
   </div>
 
   <script src="admin.js"></script>
