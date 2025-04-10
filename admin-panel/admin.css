@@ -224,6 +224,26 @@ input:focus, select:focus {
   background: #28a745;
 }
 
+/* Pour forcer la modale à apparaître tout en haut de l’écran */
+#userModal {
+  position: fixed;
+  top: 40px; /* distance du haut */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--background);
+  z-index: 1000;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  backdrop-filter: blur(6px); 
+}
+
+
+
+
+
 /* ✅ Notification */
 .notification {
   position: fixed;
@@ -279,7 +299,9 @@ input:focus, select:focus {
   max-width: 500px;
   text-align: left;
   position: relative;
+  margin-top: 40px; 
 }
+
 
 .close-btn {
   position: absolute;

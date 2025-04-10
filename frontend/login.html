@@ -5,48 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Connexion - Bonus Hunt</title>
   <link rel="stylesheet" href="login.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
   <div class="login-container">
     <div class="logo">🎰 Bonus Hunt</div>
-    
-    <h1 id="formTitle">Connexion</h1>
-    <div class="error-msg" id="errorMsg"></div>
-    
-    <!-- Formulaire Connexion / Inscription -->
+    <h1>Connexion sécurisée</h1>
+    <p class="subtitle">Entrez votre adresse email pour recevoir un lien de connexion</p>
+
+    <!-- ✅ Formulaire email -->
     <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Mot de passe" required />
-      <button type="submit" class="login-btn" id="submitBtn">Se connecter</button>
+      <input type="email" id="email" placeholder="Votre adresse email" required />
+      <button type="submit" class="login-btn" id="submitBtn">📩 Envoyer le lien</button>
     </form>
 
-    <!-- Section vérification email -->
-    <div id="verifySection" class="verify-section hidden">
-      <h2>Vérification email</h2>
-      <p>Un code de vérification a été envoyé à votre adresse email.</p>
-      
-      <!-- ⏱️ Timer + Renvoyer -->
-      <div id="verifyTimer" class="verify-timer-container hidden">
-        <p>Code expirera dans <span id="timerCountdown">5:00</span></p>
-        <button type="button" class="resend-btn hidden" id="resendCodeBtn">
-          🔁 Renvoyer
-        </button>
-      </div>
-      
-      <input type="text" id="verifyCodeInput" placeholder="Code de vérification" />
-      <button class="login-btn" id="verifyBtn">Vérifier</button>
-
-      <div class="error-msg" id="verifyError"></div>
+    <!-- ✅ Message de confirmation -->
+    <div id="successMsg" class="hidden">
+      📩 Un lien de connexion a été envoyé à votre adresse email. Il expirera dans 10 minutes.
     </div>
 
-    <!-- 🔄 Bascule Connexion / Inscription -->
-    <div class="toggle-text" id="toggleMode">
-      Pas encore inscrit ? <span>Créer un compte</span>
-    </div>
+    <!-- ⛔ Message d'erreur -->
+    <div class="error-msg" id="errorMsg"></div>
 
-    <!-- Loader -->
-    <div class="loader" id="loader"></div>
+    <!-- ⏳ Loader -->
+    <div class="loader hidden" id="loader"></div>
   </div>
 
   <script src="login.js"></script>

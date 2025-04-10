@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Connexion à Bonus Hunt</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f6f6;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+      }
+      .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-size: 24px;
+        color: #222;
+      }
+      .highlight {
+        color: #6a0dad;
+      }
+      p {
+        font-size: 16px;
+        color: #444;
+      }
+      a.button {
+        background-color: #6a0dad;
+        color: white;
+        padding: 14px 28px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin-top: 20px;
+      }
+      .footer {
+        font-size: 14px;
+        color: #666;
+        margin-top: 30px;
+      }
+      .copy-link {
+        font-size: 13px;
+        margin-top: 20px;
+      }
+      .copy-link a {
+        color: #6a0dad;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img class="logo" src="https://your-domain.com/assets/logo.jpg" alt="Bonus Hunt" />
+      <h1>Connexion à <span class="highlight">Bonus Hunt</span></h1>
+      <p>Clique sur le bouton ci-dessous pour te connecter. Ce lien expirera dans 10 minutes.</p>
+      <a href="{{LOGIN_LINK}}" class="button">Se connecter à Bonus Hunt</a>
+
+      <div class="copy-link">
+        <p>Si tu as des difficultés avec le bouton, copie-colle ce lien dans ton navigateur :</p>
+        <a href="{{LOGIN_LINK}}">{{LOGIN_LINK}}</a>
+      </div>
+
+      <div class="footer">
+        © 2025 Bonus Hunt. Tous droits réservés.
+      </div>
+    </div>
+  </body>
+</html>

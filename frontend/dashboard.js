@@ -1,9 +1,17 @@
-// dashboard.js
+// 📁 dashboard.js
 
-const email = localStorage.getItem("userEmail");
-if (!email) window.location.href = "login.html";
-const key = `sessions_${email}`;
+// ✅ Protection : redirige si l'utilisateur n'est pas connecté
+const sessionToken = localStorage.getItem("sessionToken");
+const userEmail = localStorage.getItem("userEmail");
+if (!sessionToken || !userEmail) {
+  alert("Vous devez être connecté pour accéder au dashboard.");
+  window.location.href = "login.html";
+}
 
+// ✅ Stockage des sessions par utilisateur
+const key = `sessions_${userEmail}`;
+
+// ✅ Références aux éléments du DOM
 const userEmailDisplay = document.getElementById("userEmailDisplay");
 const logoutBtn = document.getElementById("logoutBtn");
 const themeSwitch = document.getElementById("themeSwitch");
@@ -17,12 +25,19 @@ const successMessage = document.getElementById("successMessage");
 const searchInput = document.getElementById("searchInput");
 const fournisseurFilter = document.getElementById("fournisseurFilter");
 
-userEmailDisplay.textContent = `Connecté : ${email}`;
+// ✅ Nouveaux éléments de résumé
+const summaryInvesti = document.getElementById("summaryInvesti");
+const summaryBonus = document.getElementById("summaryBonus");
+const summaryBreakEven = document.getElementById("summaryBreakEven");
 
-logoutBtn.addEventListener("click", () => {
-  localStorage.removeItem("userEmail");
-  window.location.href = "login.html";
-});
+if (userEmailDisplay) userEmailDisplay.textContent = `Connecté : ${userEmail}`;
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("sessionToken");
+    localStorage.removeItem("userEmail");
+    window.location.href = "login.html";
+  });
+}
 
 function updateIcon(theme) {
   themeIcon.textContent = theme === "dark" ? "🌙" : "🌞";
@@ -47,6 +62,16 @@ themeSwitch.addEventListener("change", () => {
     updateIcon("light");
   }
 });
+
+function updateSummary(sessions) {
+  const totalInvesti = sessions.reduce((acc, s) => acc + (s.investi || 0), 0);
+  const totalBonus = sessions.length;
+  const breakEven = totalBonus ? (totalInvesti / totalBonus).toFixed(2) : 0;
+
+  summaryInvesti.textContent = `${totalInvesti.toFixed(2)} €`;
+  summaryBonus.textContent = totalBonus;
+  summaryBreakEven.textContent = `${breakEven} €`;
+}
 
 function loadFournisseursEtMachines() {
   const fournisseurs = JSON.parse(localStorage.getItem("fournisseurs") || "[]");
@@ -141,7 +166,9 @@ function displaySessions(sessions) {
   });
 
   updateChart(sessions);
+  updateSummary(sessions);
 }
+
 
 function showSuccessMessage() {
   successMessage.style.display = "block";

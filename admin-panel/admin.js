@@ -3,7 +3,6 @@
 const correctPassword = "admin123";
 const storedAdmin = localStorage.getItem("adminAccess");
 
-// Éléments DOM
 const authContainer = document.getElementById("authContainer");
 const panelContainer = document.getElementById("panelContainer");
 const errorMsg = document.getElementById("authError");
@@ -51,6 +50,7 @@ loginBtn.addEventListener("click", () => {
   }
 });
 
+
 passwordInput.addEventListener("input", () => {
   errorMsg.style.display = "none";
 });
@@ -59,47 +59,54 @@ logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("adminAccess");
   location.reload();
 });
+
+
 // 👤 Gestion des utilisateurs
 function afficherUtilisateurs() {
   const userList = document.getElementById("userList");
   userList.innerHTML = "";
 
-  const users = JSON.parse(localStorage.getItem("users") || "{}");
   const searchTerm = userSearchInput.value.toLowerCase();
 
-  if (Object.keys(users).length === 0) {
-    userList.innerHTML = "<li>Aucun utilisateur inscrit</li>";
-    return;
-  }
+  fetch("http://localhost:3000/users")
+    .then((res) => res.json())
+    .then((data) => {
+      const users = data.users || [];
+      const filtered = users.filter((email) => email.toLowerCase().includes(searchTerm));
 
-  const usersFiltered = Object.entries(users).filter(([email]) =>
-    email.toLowerCase().includes(searchTerm)
-  );
+      if (filtered.length === 0) {
+        userList.innerHTML = "<li>Aucun utilisateur trouvé</li>";
+        return;
+      }
 
-  if (usersFiltered.length === 0) {
-    userList.innerHTML = "<li>Aucun utilisateur trouvé</li>";
-    return;
-  }
-
-  usersFiltered.forEach(([email, user]) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <span>${email} ${user.verified ? "✅" : "❌"}</span>
-      <button class="delete-user-btn" data-email="${email}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
-    `;
-    li.querySelector(".delete-user-btn").addEventListener("click", () => supprimerUtilisateur(email));
-    userList.appendChild(li);
-  });
+      filtered.forEach((email) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${email}</span>
+          <button class="delete-user-btn" data-email="${email}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+        `;
+        li.querySelector(".delete-user-btn").addEventListener("click", () => supprimerUtilisateur(email));
+        userList.appendChild(li);
+      });
+    })
+    .catch(() => {
+      userList.innerHTML = "<li>Erreur de chargement des utilisateurs</li>";
+    });
 }
 
 function supprimerUtilisateur(email) {
   if (!confirm(`Supprimer l'utilisateur : ${email} ?`)) return;
-  const users = JSON.parse(localStorage.getItem("users") || "{}");
-  delete users[email];
-  localStorage.setItem("users", JSON.stringify(users));
-  showNotification(`Utilisateur \"${email}\" supprimé ✅`);
-  afficherUtilisateurs();
+  fetch("http://localhost:3000/users/" + encodeURIComponent(email), {
+    method: "DELETE",
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error();
+      showNotification(`Utilisateur \"${email}\" supprimé ✅`);
+      afficherUtilisateurs();
+    })
+    .catch(() => showNotification("Erreur lors de la suppression", "error"));
 }
+
 
 // Gérer l'affichage du panneau utilisateur
 window.addEventListener("DOMContentLoaded", () => {
@@ -121,7 +128,6 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("userModal").classList.add("hidden");
   });
 });
-
 
 
 fournisseurForm?.addEventListener("submit", (e) => {

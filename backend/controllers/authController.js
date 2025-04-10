@@ -1,4 +1,6 @@
 // 📁 controllers/authController.js
+const fs = require("fs");
+const path = require("path");
 const {
   generateToken,
   storeToken,
@@ -7,6 +9,9 @@ const {
   generateSessionToken
 } = require("../utils/token");
 const { sendLoginEmail } = require("../utils/email");
+
+// 📁 Chemin du fichier utilisateurs
+const usersFile = path.join(__dirname, "../data/users.json");
 
 // ✉️ Envoie du lien magique par email
 const sendMagicLink = async (req, res) => {
@@ -39,6 +44,24 @@ const validateToken = (req, res) => {
   }
 
   const sessionToken = generateSessionToken(email);
+
+  // ✅ Enregistrer l'email dans users.json sous forme d'objet
+  try {
+    let users = {};
+    if (fs.existsSync(usersFile)) {
+      const data = fs.readFileSync(usersFile, "utf8");
+      users = JSON.parse(data || "{}");
+    }
+
+    // Ajoute l’utilisateur s’il n’existe pas déjà
+    if (!users[email]) {
+      users[email] = { verified: true };
+      fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+    }
+  } catch (err) {
+    console.error("❌ Erreur lors de l'enregistrement de l'utilisateur:", err);
+  }
+
   res.json({ success: true, sessionToken, email });
 };
 
